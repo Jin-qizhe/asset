@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+</head>
+<body>
+<div class="layui-form-item" style="text-align: center;">
+    <div class="layui-inline">
+        <div class="layui-input-inline">
+            <input type="text" name="start" id="start" placeholder="二维码起始编号(数字)"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-inline">--</div>
+    <div class="layui-inline">
+        <div class="layui-input-inline">
+            <input type="text" name="end" id="end" placeholder="二维码结束编号(数字)"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <a href="javascript:;" class="layui-btn layui-btn-sm layui-bg-blue"id="makeqrcodes">
+            <i class="layui-icon">&#xe655; 批量生成二维码</i>
+        </a>
+    </div>
+</div>
+<script src="layui/jquery.min.js"></script>
+<script>
+    $("#makeqrcodes").on('click',function(){
+        var start=document.getElementById("start").value;
+        var end=document.getElementById("end").value;
+        $.ajax({
+            url:'/qrcode/makeqrcodes/'+start+'/'+end+'',
+            method:'post',
+            /*data:{
+                "qrcode":qrcode, "username":username, "brand":brand,
+                "cpu":cpu, "ram":ram, "purpose":purpose
+            },*/
+            //data:data.field,
+            dataType:'JSON',
+            success:function(res){
+                if(res.code='0'){
+                    alert("二维码创建成功!");
+                    //window.open("list.html");
+                }else{
+                    alert("请输入数字");
+                }
+            },
+            error:function(res){
+                alert('请输入数字');
+            }
+        });
+    });
+</script>
+</body>
+</html>

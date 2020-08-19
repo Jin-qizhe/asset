@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>资产借用列表</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+</head>
+<body>
+
+<!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend style="text-align:center">资产信息列表</legend>
+</fieldset>-->
+
+<table id="demo" lay-filter="test"></table>
+
+<script src="layui/layui.js"></script>
+<script src="layui/jquery.min.js"></script>
+<script>
+    layui.use(['util', 'table'], function () {
+        var table = layui.table, $ = layui.$, util = layui.util;
+        var url = window.location.href;
+        var qrcode = url.split("=")[1];
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            //,height: 312
+            , url: '/assets/getUserecord' //数据接口
+            , where: {"qrcode": qrcode}
+            , page: true //开启分页
+            //, toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , cols: [
+                [ //表头
+                    {field: 'qrcode', title: '二维码编号', align: 'center', width: 200}
+                    , {field: 'username', title: '使用人记录', align: 'center', width: 200}
+                    , {
+                    field: 'userdepart', title: '所在部门', align: 'center', width: 270, templet: function (d) {
+                        if (d.userdepart == '0') {
+                            return '总经办(亿点通)'
+                        } else if (d.userdepart == '1') {
+                            return '综合部(亿点通)'
+                        } else if (d.userdepart == '2') {
+                            return '市场部(亿点通)'
+                        } else if (d.userdepart == '3') {
+                            return '移动开发部(亿点通)'
+                        } else if (d.userdepart == '4') {
+                            return '情指项目部(亿点通)'
+                        } else if (d.userdepart == '5') {
+                            return '金华项目部(亿点通)'
+                        } else if (d.userdepart == '6') {
+                            return '治安项目部(亿点通)'
+                        } else if (d.userdepart == '7') {
+                            return '产品部(亿点通)'
+                        } else if (d.userdepart == '8') {
+                            return '设计部(亿点通)'
+                        } else if (d.userdepart == '9') {
+                            return '市场部(计算所)'
+                        } else if (d.userdepart == '10') {
+                            return '集成技术部(计算所)'
+                        } else {
+                            return '软件开发部(计算所)'
+                        }
+                    }
+                }
+                    , {field: 'userarea', title: '使用区域', align: 'center', width: 220,templet: function (d) {
+                        if (d.userarea == '0') {
+                            return '公司'
+                        } else if (d.userarea == '1') {
+                            return '市局'
+                        } else if (d.userarea == '2') {
+                            return '市政府'
+                        }else if (d.userarea == '3') {
+                            return '省厅'
+                        }else if (d.userarea == '4') {
+                            return '义乌'
+                        }else {
+                            return '盐城'
+                        }
+                    }}
+                    , {
+                    field: 'usetime', title: '领用时间', align: 'center', width: 320, templet: function (d) {
+                        return util.toDateString(d.usetime, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                    , {
+                    field: 'returntime', title: '归还时间', align: 'center', width: 320, templet: function (d1) {
+                        if (d1.returntime == null) {
+                            return '暂未归还!';
+                        } else {
+                            return util.toDateString(d1.returntime, "yyyy-MM-dd HH:mm:ss");
+                            //return '已归还!';
+                        }
+                    }
+                }
+                    /*,{field: 'usetime', title: '领用时间', align: 'center',width:120}
+                    ,{field: 'returntime', title: '归还时间', align: 'center',width:120}*/
+                ]
+            ]
+        });
+
+
+    });
+</script>
+
+
+<!--<script type="text/html" id="t1">
+    {{# if(d.t1=='0'){d.t1='内网'}}
+    {{# if(d.t1=='1'){d.t1='外网'}}
+    {{# if(d.t1=='2'){d.t1='视频专用'}}
+</script>-->
+</body>
+</html>

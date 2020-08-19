@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydt.mapper.TAssetsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ydt.bean.TAssets">
+        <id column="ID" property="id" />
+        <result column="QRCODE" property="qrcode" />
+        <result column="USETIME" property="usetime" jdbcType="TIMESTAMP"/>
+        <result column="BRAND" property="brand" />
+        <result column="CPU" property="cpu" />
+        <result column="RAM" property="ram" />
+        <result column="PURPOSE" property="purpose" />
+        <result column="STATUS" property="status" />
+        <result column="USERNAME" property="username" />
+        <result column="USERDEPART" property="userdepart" />
+        <result column="USERAREA" property="userarea" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID AS id, QRCODE AS qrcode, USETIME AS usetime, BRAND AS brand, CPU AS cpu, RAM AS ram, PURPOSE AS purpose, STATUS AS status, USERNAME AS username, USERDEPART AS userdepart, USERAREA AS userarea
+    </sql>
+
+</mapper>

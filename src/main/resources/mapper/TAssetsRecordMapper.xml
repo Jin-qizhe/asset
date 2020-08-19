@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydt.mapper.TAssetsRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ydt.bean.TAssetsRecord">
+        <id column="ID" property="id" />
+        <result column="QRCODE" property="qrcode" />
+        <result column="USERNAME" property="username" />
+        <result column="USETIME" property="usetime" jdbcType="TIMESTAMP"/>
+        <result column="RETURNTIME" property="returntime" jdbcType="TIMESTAMP"/>
+        <result column="USERID" property="userid" />
+        <result column="STATUS" property="status" />
+        <result column="USERDEPART" property="userdepart" />
+        <result column="USERAREA" property="userarea" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID AS id, QRCODE AS qrcode, USERNAME AS username, USETIME AS usetime, RETURNTIME AS returntime, USERID AS userid, STATUS AS status, USERDEPART AS userdepart, USERAREA AS userarea
+    </sql>
+
+</mapper>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>资产详细信息</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+
+
+</head>
+
+<body>
+<div class="layui-form" style="margin-top: 10px;" method="post">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>详细信息</legend>
+    </fieldset>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">id:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input" id="id">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">借用时间:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input" id="usetime">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">二维码编号:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input" id="qrcode">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">使用人:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input " id="username">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">所在部门:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input " id="userdepart">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">使用区域:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input" id="userarea">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">品牌:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input" id="brand">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">CPU:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input " id="cpu">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">内存:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input" id="ram">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">用途:</label>
+            <div class="layui-input-block">
+                <input type="text" lay-verify="required" readonly="readonly" class="layui-input " id="purpose">
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <label class="layui-form-label" style="text-align:center">状态:</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="readonly" class="layui-input" id="status" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" onclick="record()"><i class="layui-icon">使用记录</i></button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script src="layui/layui.js"></script>
+<script src="layui/jquery.min.js"></script>
+<script type="text/javascript" src="layui/qrcode.min.js"></script>
+<script>
+    layui.use(['jquery', 'table', 'form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , table = layui.table
+            , layedit = layui.layedit
+            , $ = layui.$
+            , laydate = layui.laydate;
+
+        detail();
+
+        function detail() {
+            var url = window.location.href;
+            var qrcode = url.split("=")[1];
+            //alert(qrcode);
+            $.ajax({
+                type: 'POST',
+                url: '/assets/detail1',
+                data: {"qrcode": qrcode},
+                dataType: 'json',
+                success: function (result) {
+                    //alert('成功');
+                    if (result != null) {
+                        if (result["code"] == 0) {
+                            var data = result["data"];
+                            var purpose;
+                            var pcode=data["purpose"];
+                            if(pcode=='0'){
+                                purpose='内网'
+                            }else if(pcode=='1'){
+                                purpose='外网'
+                            }else{
+                                purpose='视频专用'
+                            }
+                            var status;
+                            var scode=data["status"];
+                            if(scode=='0'){
+                                status='在库/已归还'
+                            }else if(scode=='1'){
+                                status='在用'
+                            }else{
+                                status='报废'
+                            }
+
+                            var department=data["userdepart"];
+                            var userdepart;
+                            if(department=='0'){
+                                userdepart='总经办(亿点通)'
+                            }else if(department=='1'){
+                                userdepart='综合部(亿点通)'
+                            }else if(department=='2'){
+                                userdepart='市场部(亿点通)'
+                            }else if(department=='3'){
+                                userdepart='移动开发部(亿点通)'
+                            }else if(department=='4'){
+                                userdepart='情指项目部(亿点通)'
+                            }else if(department=='5'){
+                                userdepart='金华项目部(亿点通)'
+                            }else if(department=='6'){
+                                userdepart='治安项目部(亿点通)'
+                            }else if(department=='7'){
+                                userdepart='产品部(亿点通)'
+                            }else if(department=='8'){
+                                userdepart='设计部(亿点通)'
+                            }else if(department=='9'){
+                                userdepart='市场部(计算所)'
+                            }else if(department=='10'){
+                                userdepart='集成技术部(计算所)'
+                            }else if(department=='11'){
+                                userdepart='软件开发部(计算所)'
+                            }
+
+                            var userarea;
+                            var area=data["userarea"];
+                            if(area=='0'){
+                                userarea='公司'
+                            }else if(area=='1'){
+                                userarea='市局'
+                            }else if(area=='2'){
+                                userarea='市政府'
+                            }else if(area=='3'){
+                                userarea='省厅'
+                            }else if(area=='4'){
+                                userarea='义乌'
+                            }else{
+                                userarea='盐城'
+                            }
+
+                            var date=data["usetime"];
+                            var usetime=function renderTime(date) {
+                                var dateee = new Date(data["usetime"]).toJSON();
+                                return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+                            }
+
+                            /*var showqrcode = new QRCode(document.getElementById("showqrcode"), {
+                                width : 150,
+                                height : 150
+                            });*/
+
+                            /*function makeCode () {
+                                var elText = data["qrcode"];
+                                alert(elText);
+
+                                showqrcode.makeCode(elText);
+                            }
+                            makeCode();*/
+
+                            $("#id").val(data["id"]);
+                            $("#qrcode").val(data["qrcode"]);
+                            $("#username").val(data["username"]);
+                            $("#userdepart").val(userdepart);
+                            $("#userarea").val(userarea);
+                            $("#usetime").val(usetime);
+                            $("#brand").val(data["brand"]);
+                            $("#cpu").val(data["cpu"]);
+                            $("#ram").val(data["ram"]);
+                            $("#purpose").val(purpose);
+                            $("#status").val(status);
+                            form.render();
+                        }
+
+                    }
+                },
+                error: function () {
+                    alert('失败');
+                }
+            });
+        }
+    });
+</script>
+<script>
+    function record(){
+        //alert('归还');
+        var qrcode=$("#qrcode").val();
+        window.location.href="listrecord.html?qrcode="+qrcode;
+    }
+</script>
+
+</body>
+</html>

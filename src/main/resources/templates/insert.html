@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>资产信息绑定</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>资产信息绑定</legend>
+</fieldset>
+
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="text-align:center" >请先扫码</label>
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-primary " onclick="DDsaoMa()"><i class="layui-icon">&#xe660;</i></button>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">二维码编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="qrcode" id="qrcode" lay-verify="title" readonly="true" autocomplete="off" placeholder="扫二维码自动获取" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">使用人姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" id="username" lay-verify="title" readonly="true" autocomplete="off" placeholder="扫二维码自动获取" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="text-align:center">所在部门</label>
+        <div class="layui-input-block">
+            <select name="userdepart" id="userdepart" lay-filter="userdepart">
+                <option value="" selected="">请选择</option>
+                <option value="0">总经办(亿点通)</option>
+                <option value="1">综合部(亿点通)</option>
+                <option value="2">市场部(亿点通)</option>
+                <option value="3">移动开发部(亿点通)</option>
+                <option value="4">情指项目部(亿点通)</option>
+                <option value="5">金华项目部(亿点通)</option>
+                <option value="6">治安项目部(亿点通)</option>
+                <option value="7">产品部(亿点通)</option>
+                <option value="8">设计部(亿点通)</option>
+                <option value="9">市场部(计算所)</option>
+                <option value="10">集成技术部(计算所)</option>
+                <option value="11">软件开发部(计算所)</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="text-align:center">使用区域</label>
+        <div class="layui-input-block">
+            <select name="userarea" id="userarea" lay-filter="userarea">
+                <option value="" selected="">请选择</option>
+                <option value="0">公司</option>
+                <option value="1">市局</option>
+                <option value="2">市政府</option>
+                <option value="3">省厅</option>
+                <option value="4">义乌</option>
+                <option value="5">盐城</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <label class="layui-form-label" style="text-align:center">userId</label>
+        <div class="layui-input-block">
+            <input type="text" name="userid" id="userid" lay-verify="title" readonly="true" autocomplete="off" placeholder="扫二维码自动获取" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="text-align:center">品牌</label>
+        <div class="layui-input-block">
+            <input type="text" name="brand" id="brand" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="text-align:center">CPU</label>
+        <div class="layui-input-block">
+            <input type="text" name="cpu" id="cpu" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="text-align:center">内存</label>
+        <div class="layui-input-block">
+            <input type="text" name="ram" id="ram" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="text-align:center">用途</label>
+        <div class="layui-input-block">
+            <select name="purpose" id="purpose" lay-filter="purpose">
+                <option value="" selected="">请选择</option>
+                <option value="0">内网</option>
+                <option value="1">外网</option>
+                <option value="2">视频专用</option>
+            </select>
+        </div>
+    </div>
+
+
+
+
+
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+
+
+<script src="layui/layui.js" charset="utf-8"></script>
+<script src="layui/jquery.min.js"></script>
+<script src="//g.alicdn.com/dingding/open-develop/1.6.9/dingtalk.js"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<!--<script>
+    //alert(111);
+    dd.ready(function() {
+        dd.runtime.permission.requestAuthCode({
+            corpId : "ding1fb262aa54b14385a1320dcb25e91351",
+            onSuccess : function(result) {
+                var code = result.code;
+                $.ajax({
+                    url:'/assets/test/'+code+'',
+                    method:'post',
+                    //data:data.field,
+                    dataType:'JSON',
+                    success:function(res){
+                        //alert(JSON.stringify(res.data));
+                        if(res.code='0'){
+                            $("#username").val(res.data["name"]);
+                            //alert(res.data["name"]);
+                            alert("ok");
+                            //window.location.reload();
+                            //window.open("list.html");
+                        }else{
+                            alert("er");
+                        }
+                    }
+                });
+                alert(code);　　　　　　　　　　　　//将code 发往后台处理
+            },
+            onFail : function(err) {
+                alert('出错了, ' + err);
+            }
+        });
+
+    });
+</script>-->
+<script type="text/javascript">
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+        //监听指定开关
+        form.on('switch(switchTest)', function(data){
+            layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            /*layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            })*/
+            /*var qrcode=data.field["qrcode"];
+            var username=data.field["username"]
+            var brand=data.field["brand"];
+            var cpu=data.field["cpu"];
+            var ram=data.field["ram"];
+            var purpose=data.field["purpose"];
+            alert(data.field["cpu"]);*/
+            //alert(111);
+            //alert(JSON.stringify(data.field));
+            var qrcode=$("#qrcode").val();
+            //alert(qrcode);
+            //alert(JSON.stringify(data.field));
+            if (qrcode != ''){
+                $.ajax({
+                    url:'/assets/insert',
+                    method:'post',
+                    data:data.field,
+                    dataType:'JSON',
+                    success:function(res){
+                        if(res.code='0'){
+                            layer.msg("绑定成功", {icon: 6});
+                            window.location.reload();
+                            //window.open("list.html");
+                        }else{
+                            layer.msg("绑定失败", {icon: 5});
+                        }
+                    }
+                });
+            } else {
+                layer.msg("请先扫码", {icon: 7});
+            }
+            return false;
+        });
+    });
+</script>
+
+<script>
+    //扫码 可以用
+    function DDsaoMa() {
+        dd.ready(function () {
+            dd.biz.util.scan({
+                type: 'all', // type 为 all、qrCode、barCode，默认是all。
+                onSuccess: function (data) {
+                    //onSuccess将在扫码成功之后回调
+                    /* data结构
+                     { 'text': String}
+                     */
+                    //var qrcode=JSON.stringify(data);
+                    $("#qrcode").val(data["text"]);
+                    dd.runtime.permission.requestAuthCode({
+                        corpId : "ding1fb262aa54b14385a1320dcb25e91351",
+                        onSuccess : function(result) {
+                            var code = result.code;
+                            $.post("/assets/test",{"code":code},function (res) {
+                                if(res.code=='0'){
+                                    var d=res.data;
+                                    //alert(JSON.stringify(d));
+                                    $("#username").val(d.name);
+                                    $("#userid").val(res.data["userid"])
+                                    var qrcode=$("#qrcode").val();
+                                    var userid=$("#userid").val();
+                                    //alert(qrcode);
+                                    $.post("/assets/assetState",{"qrcode":qrcode,"userid":userid},function (res1) {
+                                        if(res1.code=='0'){
+                                            var d=res1.data;
+                                            //alert(JSON.stringify(d));
+                                            //alert("shul"+res1.count);
+                                            if(res1.count=='1'){
+                                                if(JSON.stringify(d)=='1'){
+                                                    //alert('进来了');
+                                                    layer.msg("你已借用该资产");
+                                                    window.location.href="mydetail.html?qrcode="+qrcode;
+                                                }else{
+                                                    layer.msg("资产已被他人借用");
+                                                    window.location.href="otherdetail.html?qrcode="+qrcode;
+                                                }
+                                            }
+                                            //alert(res.data["name"]);
+                                            //alert("ok");
+                                            //window.location.reload();
+                                            //window.open("list.html");
+                                        }else{
+                                            alert("er");
+                                        }
+                                    },"json")
+                                    //alert(res.data["name"]);
+                                    //alert("ok");
+                                    //window.location.reload();
+                                    //window.open("list.html");
+                                }else{
+                                    //alert("er");
+                                }
+                            },"json")
+                            //alert(code);　　　　　　　　　　　　//将code 发往后台处理
+                        },
+                        onFail : function(err) {
+                            alert('出错了, ' + err);
+                        }
+                    });
+                    //alert(JSON.stringify(data));
+                },
+                onFail: function (err) {}
+            })
+
+
+        });
+        /*var qrcode=$("#qrcode").val();
+        $.ajax({
+            url:'/assets/assetState',
+            method:'post',
+            data:{"qrcode":qrcode},
+            async: false,  //只需将此属性设置为false
+            dataType:'JSON',
+            success:function(res){
+                //alert(JSON.stringify(res.data));
+                if(res.code='0'){
+                    alert(res.count);
+                    alert(qrcode);
+                    if(res.count>0){
+                        alert('资产已被借用');
+                        window.open("listrecord.html");
+                    }
+                }else{
+                    //alert("er");
+                }
+            }
+        });*/
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>资产信息列表</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+</head>
+<body>
+
+<!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend style="text-align:center">资产信息列表</legend>
+</fieldset>-->
+
+<table id="demo" lay-filter="test"></table>
+
+<script src="layui/layui.js"></script>
+<script src="layui/jquery.min.js"></script>
+
+<script type="text/html" id="bar">
+    <div class="layui-btn-group">
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="detail">详情</a>
+            <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="scrap">资产报废</a>
+            <a class="layui-btn layui-btn-sm layui-btn-green" lay-event="record">使用记录</a>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width:105px">二维码编号:</label>
+            <input type="text" name="qrcode" id="qrcode" placeholder="请输入"
+                   autocomplete="off" class="layui-input" style="width:100px">
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width:105px">当前使用人:</label>
+            <input type="text" name="username" id="username" placeholder="请输入"
+                   autocomplete="off" class="layui-input" style="width:100px">
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width:70px">部门:</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <select name="userdepart" id="userdepart" lay-filter="purpose">
+                    <option value="" selected="">请选择</option>
+                    <option value="0">总经办(亿点通)</option>
+                    <option value="1">综合部(亿点通)</option>
+                    <option value="2">市场部(亿点通)</option>
+                    <option value="3">移动开发部(亿点通)</option>
+                    <option value="4">情指项目部(亿点通)</option>
+                    <option value="5">金华项目部(亿点通)</option>
+                    <option value="6">治安项目部(亿点通)</option>
+                    <option value="7">产品部(亿点通)</option>
+                    <option value="8">设计部(亿点通)</option>
+                    <option value="9">市场部(计算所)</option>
+                    <option value="10">集成技术部(计算所)</option>
+                    <option value="11">软件开发部(计算所)</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width:70px">用途:</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <select name="purpose" id="purpose" lay-filter="purpose">
+                    <option value="" selected="">请选择</option>
+                    <option value="0">内网</option>
+                    <option value="1">外网</option>
+                    <option value="2">视频专用</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width:70px">状态:</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <select name="status" id="status" lay-filter="status">
+                    <option value="" selected="">请选择</option>
+                    <option value="0">在库/已归还</option>
+                    <option value="1">在用</option>
+                    <option value="2">报废</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <a href="javascript:;" class="layui-btn layui-btn-sm " id="search">
+                <i class="layui-icon">&#xe615; 查询</i>
+            </a>
+            <a href="javascript:;" class="layui-btn layui-btn-sm layui-bg-blue" id="makeqrcodes">
+                <i class="layui-icon">&#xe655; 批量生二维码</i>
+            </a>
+        </div>
+    </div>
+</script>
+<!--<script type="text/html" id="t1">
+    {{# if(d.t1=='0'){d.t1='内网'}}
+    {{# if(d.t1=='1'){d.t1='外网'}}
+    {{# if(d.t1=='2'){d.t1='视频专用'}}
+</script>-->
+<script>
+    layui.use(['util', 'table', 'form'], function () {
+        var table = layui.table, $ = layui.$, util = layui.util, form = layui.form;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            //,height: 312
+            , url: '/assets/selectBypage' //数据接口
+            , page: true //开启分页
+            , id: 'testReload'
+            ,height: 'full-20' //高度最大化减去差值
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , cols: [
+                [ //表头
+                    {field: 'qrcode', title: '二维码编号', align: 'center', width: 100, fixed: 'left'}
+                    , {field: 'username', title: '当前使用人', align: 'center', width: 100},
+                    {
+                        field: 'userdepart', title: '所在部门', align: 'center', width: 180, templet: function (d) {
+                            if (d.userdepart == '0') {
+                                return '总经办(亿点通)'
+                            } else if (d.userdepart == '1') {
+                                return '综合部(亿点通)'
+                            } else if (d.userdepart == '2') {
+                                return '市场部(亿点通)'
+                            } else if (d.userdepart == '3') {
+                                return '移动开发部(亿点通)'
+                            } else if (d.userdepart == '4') {
+                                return '情指项目部(亿点通)'
+                            } else if (d.userdepart == '5') {
+                                return '金华项目部(亿点通)'
+                            } else if (d.userdepart == '6') {
+                                return '治安项目部(亿点通)'
+                            } else if (d.userdepart == '7') {
+                                return '产品部(亿点通)'
+                            } else if (d.userdepart == '8') {
+                                return '设计部(亿点通)'
+                            } else if (d.userdepart == '9') {
+                                return '市场部(计算所)'
+                            } else if (d.userdepart == '10') {
+                                return '集成技术部(计算所)'
+                            } else {
+                                return '软件开发部(计算所)'
+                            }
+                        }
+                    }
+                    , {
+                    field: 'userarea', title: '使用区域', align: 'center', width: 100, templet: function (d) {
+                        if (d.userarea == '0') {
+                            return '公司'
+                        } else if (d.userarea == '1') {
+                            return '市局'
+                        } else if (d.userarea == '2') {
+                            return '市政府'
+                        } else if (d.userarea == '3') {
+                            return '省厅'
+                        } else if (d.userarea == '4') {
+                            return '义乌'
+                        } else {
+                            return '盐城'
+                        }
+                    }
+                }
+                    , {field: 'brand', title: '品牌', align: 'center', width: 120}
+                    , {field: 'cpu', title: 'cpu', align: 'center', width: 120}
+                    , {field: 'ram', title: '内存', align: 'center', width: 120}
+                    , {
+                    field: 'purpose', title: '用途', align: 'center', width: 120, templet: function (d) {
+                        if (d.purpose == '0') {
+                            return '内网'
+                        } else if (d.purpose == '1') {
+                            return '外网'
+                        } else {
+                            return '视频专用'
+                        }
+                    }
+                }
+                    , {
+                    field: 'status', title: '状态', align: 'center', width: 120, templet: function (d) {
+                        if (d.status == '0') {
+                            return '在库/已归还'
+                        } else if (d.status == '1') {
+                            return '在用'
+                        } else {
+                            return '报废'
+                        }
+                    }
+                }
+                    , {
+                    field: 'usetime', title: '领用时间', align: 'center', width: 220, templet: function (d) {
+                        return util.toDateString(d.usetime, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                    , {title: '操作', align: 'center', toolbar: '#bar', width: 225}
+                ]
+            ]
+        });
+        table.on('tool(test)', function (obj) {
+            //alert(1);
+            var layEvent = obj.event;
+            //alert(layEvent);
+            var data = obj.data;
+            var qrcode = data.qrcode;
+            var id = data.id;
+            //alert(data.qrcode);
+            switch (layEvent) {
+                case 'detail':
+                    //window.location.href="detail.html?id="+data.id;
+                    //window.open("detail.html?id="+data.id);
+                    var url = "detail.html?id=" + data.id;
+                    layer.open({
+                        title: "详情",
+                        area: ["1000px", "600px"],
+                        type: 2,
+                        content: url
+                    });
+                    break;
+                case 'scrap':
+                    $.ajax({
+                        url: '/assets/scrap/',
+                        method: 'post',
+                        data: {
+                            "qrcode": qrcode
+                        },
+                        dataType: 'JSON',
+                        success: function (res) {
+                            if (res.code = '0') {
+                                alert("报废成功!");
+                                window.location.reload();
+                                //window.open("list.html");
+                            } else {
+                                alert("报废失败");
+                            }
+                        },
+                        error: function (res) {
+                            alert('报废失败');
+                        }
+                    });
+                    break;
+                case 'record':
+                    window.location.href = "listrecord.html?qrcode=" + qrcode;
+                    break;
+            }
+        })
+
+        /*$("#makeqrcodes").on('click', function () {
+            var url = "makeqrcode.html";
+            layer.open({
+                title: "批量生成二维码",
+                area: ["650px", "110px"],
+                type: 2,
+                content: url
+            });
+
+        });*/
+
+        $(document.body).on("click", "#makeqrcodes", function () {
+            var url = "makeqrcode.html";
+            layer.open({
+                title: "批量生成二维码",
+                area: ["650px", "110px"],
+                type: 2,
+                content: url
+            });
+        })
+
+        $(document.body).on("click", "#search", function () {
+            //console.log("1")
+            var qrcode = $("#qrcode").val();
+            var username = $("#username").val();
+            var purpose = $("#purpose").val();
+            var status = $("#status").val();
+            var userdepart = $("#userdepart").val();
+            //alert("1:"+qrcode+",2:"+username+",3:"+purpose+",4:"+status+",5:"+brand);
+            table.reload('testReload', {
+                elem: '#demo',
+                url: '/assets/selectBypageSearch',
+                page: true,
+                where: {"qrcode": qrcode, "username": username, "purpose": purpose, "status": status, "userdepart": userdepart}
+            })
+        });
+    });
+</script>
+</body>
+</html>
